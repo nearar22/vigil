@@ -1,12 +1,14 @@
 # Vigil
 
-*A caretaker's manual for the shared flame.*
+> Contract `0x73be85B98c3b7a0a4a25696E85A6ca410E95632E` on GenLayer Bradbury
+> (chain 4221), [open on the explorer](https://explorer-bradbury.genlayer.com/address/0x73be85B98c3b7a0a4a25696E85A6ca410E95632E).
+> Kindled by tx [`0x267df19b`](https://explorer-bradbury.genlayer.com/tx/0x267df19bebaa845781691da0511edaf7d313d0ce8300a5fc8d88eed7db7143f6).
 
 There is one flame. It does not belong to you. It belongs to everyone who has
-ever tended it and everyone who will. This manual explains what the flame is,
-how to keep it alight, what kills it, and what happens when it dies. The flame
-lives inside an Intelligent Contract on GenLayer Bradbury; this manual only
-describes the rules the contract already enforces.
+ever tended it and everyone who will. What follows keeps the form of a
+caretaker's manual: what the flame is, how to keep it alight, what kills it, and
+what happens when it dies. Every rule described here is one the Intelligent
+Contract already enforces on its own.
 
 ---
 
@@ -128,10 +130,18 @@ operator would privately own the only flame. Here no one does. The contract
 holds it; a static frontend renders it as a single living light in the dark that
 brightens, dims, and reddens with its on-chain vitality.
 
----
+## If something looks wrong (a caretaker's troubleshooting note)
 
-The flame burns on-chain at
-[`0x73be85B98c3b7a0a4a25696E85A6ca410E95632E`](https://explorer-bradbury.genlayer.com/address/0x73be85B98c3b7a0a4a25696E85A6ca410E95632E),
-first kindled in transaction
-[`0x267df19bebaa845781691da0511edaf7d313d0ce8300a5fc8d88eed7db7143f6`](https://explorer-bradbury.genlayer.com/tx/0x267df19bebaa845781691da0511edaf7d313d0ce8300a5fc8d88eed7db7143f6).
-The rules as the contract truly keeps them are in `contracts/contract.py`.
+- The flame dimmed though no one harmed it: that is the constant decay. Untended,
+  it falls on its own. Tend it.
+- Your offering "passed" though you meant well: the Warden read it as generic for
+  the flame's current condition. Be specific and fit the moment.
+- The era number jumped and the vitality reset to its base: the flame either died
+  and was rekindled, or ascended on a sustained streak. Check `get_eras` for an
+  epitaph; an epitaph means a death, its absence means an ascension.
+- A write seemed to fail in your wallet but the flame still changed: an AI write
+  takes minutes and the client can raise on the receipt while the transaction is
+  live. Trust `get_flame`, not the wallet's return.
+
+The authoritative rules, exactly as enforced, are the contract itself; the
+explorer link sits at the top of this manual.
