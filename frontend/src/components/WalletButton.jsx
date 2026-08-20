@@ -112,7 +112,7 @@ export default function WalletButton({ wallet }) {
                 className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-glowtext-dim transition hover:bg-white/5 hover:text-glowtext"
               >
                 <Droplets size={15} />
-                Claim test GEN
+                Open GenLayer Studio
               </a>
 
               <div className="my-1 h-px bg-abyss-line" />

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CHAIN_ID, CHAIN_ID_HEX, RPC_URL, EXPLORER } from '../lib/contract.js';
 
-const BRADBURY_PARAMS = {
+const STUDIO_PARAMS = {
   chainId: CHAIN_ID_HEX,
-  chainName: 'GenLayer Bradbury Testnet',
+  chainName: 'GenLayer Studio Network',
   nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 },
   rpcUrls: [RPC_URL],
   blockExplorerUrls: [`${EXPLORER}/`],
@@ -38,7 +38,7 @@ export function useWallet() {
     }
   }, []);
 
-  // Real MetaMask connection: request accounts, then add and switch to Bradbury.
+  // Real MetaMask connection: request accounts, then add and switch to Studio.
   const connect = useCallback(async () => {
     const eth = getEth();
     if (!eth) {
@@ -49,7 +49,7 @@ export function useWallet() {
     try {
       const accounts = await eth.request({ method: 'eth_requestAccounts' });
       try {
-        await eth.request({ method: 'wallet_addEthereumChain', params: [BRADBURY_PARAMS] });
+        await eth.request({ method: 'wallet_addEthereumChain', params: [STUDIO_PARAMS] });
       } catch {
         /* chain may already exist */
       }
@@ -77,7 +77,7 @@ export function useWallet() {
     const eth = getEth();
     if (!eth) return;
     try {
-      await eth.request({ method: 'wallet_addEthereumChain', params: [BRADBURY_PARAMS] });
+      await eth.request({ method: 'wallet_addEthereumChain', params: [STUDIO_PARAMS] });
       await eth.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: CHAIN_ID_HEX }] });
       await refreshChain();
     } catch {
@@ -102,5 +102,5 @@ export function useWallet() {
   }, [refreshChain]);
 
   const onRightChain = state.chainId === CHAIN_ID;
-  return { ...state, onRightChain, connect, disconnect, switchChain };
+  return { ...state, provider: getEth(), onRightChain, connect, disconnect, switchChain };
 }

@@ -195,7 +195,7 @@ export default function App() {
         onConfirm={confirmTend}
         onCancel={() => setConfirmOpen(false)}
         title="Tend the flame"
-        body="This submits a transaction on Bradbury Testnet. Network fees apply. The AI warden may take one to five minutes to judge your offering. Continue?"
+        body="This submits a gasless transaction on GenLayer Studio. The AI warden may take one to five minutes to judge your offering. Continue?"
         confirmLabel="Tend the flame"
       />
       <ToastStack toasts={toasts} onDismiss={dismiss} />

@@ -6,15 +6,18 @@ import {
   fetchFlame,
   fetchOfferings,
 } from '../lib/contract.js';
-import { pollUntilDecided } from '../lib/tx.js';
+import { assertAccepted, pollUntilDecided } from '../lib/tx.js';
 
 const INITIAL = { phase: 'idle', liveStatus: '', error: null, offering: null, flame: null, died: false };
+
+const sameAddress = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
+const normalizedText = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 function friendlyError(e) {
   const s = String(e);
   if (/user rejected|denied/i.test(s)) return 'You declined the signature request.';
   if (/LackOfFundForMaxFee|insufficient/i.test(s))
-    return 'Wallet balance is below the write fee reserve. Claim test GEN and retry.';
+    return 'The Studio AI transaction could not be signed. Check the wallet network and retry.';
   if (/rate limit|429/i.test(s)) return 'The network is busy. Wait a moment and retry.';
   return 'The offering could not be tended. Please retry.';
 }
@@ -37,6 +40,7 @@ export function useTend({ onConfirmed, pausePolling, resumePolling } = {}) {
       busy.current = true;
       pausePolling?.();
       setState({ ...INITIAL, phase: 'wallet' });
+      const sender = account?.address || account;
 
       let baseline = 0;
       try {
@@ -66,14 +70,25 @@ export function useTend({ onConfirmed, pausePolling, resumePolling } = {}) {
 
       setState((s) => ({ ...s, phase: 'contemplating' }));
 
-      if (hash) {
-        // Surface the real on-chain status name while the warden deliberates.
-        pollUntilDecided(
+      if (!hash) {
+        setState((s) => ({ ...s, phase: 'error', error: 'No transaction was submitted.' }));
+        busy.current = false;
+        resumePolling?.();
+        return false;
+      }
+      try {
+        const decision = await pollUntilDecided(
           client,
           hash,
           (liveStatus) => setState((s) => ({ ...s, liveStatus })),
           { tries: 60, intervalMs: 6000 }
-        ).catch(() => {});
+        );
+        assertAccepted(decision);
+      } catch (e) {
+        setState((s) => ({ ...s, phase: 'error', error: String(e.message || e) }));
+        busy.current = false;
+        resumePolling?.();
+        return false;
       }
 
       // The AI write can take minutes; poll the shared state for up to ~6 min.
@@ -82,7 +97,14 @@ export function useTend({ onConfirmed, pausePolling, resumePolling } = {}) {
           const stats = await fetchStats();
           if (stats.offerings > baseline) {
             const [flame, offs] = await Promise.all([fetchFlame(), fetchOfferings(20)]);
-            const newest = offs[0] || null;
+            const newest = offs.find(
+              (item) => sameAddress(item.by, sender)
+                && normalizedText(item.offering) === normalizedText(offering)
+            ) || null;
+            if (!newest) {
+              await new Promise((r) => setTimeout(r, 1000));
+              continue;
+            }
             const died = !!newest && newest.event === 'extinguished';
             setState((s) => ({
               ...s,

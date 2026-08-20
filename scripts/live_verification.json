@@ -1,0 +1,23 @@
+{
+  "network": "studionet",
+  "contract": "0xc2c3bAe9Bb9a4ebA5bA615aa99165777ac7425ab",
+  "startVitality": 60,
+  "nourishment": {
+    "transaction": "0x24a398b5d113ca484293023b0e5da9387fe1e4c4432f934d6c248137cdd3fd34",
+    "status": "ACCEPTED",
+    "verdict": "nourish",
+    "magnitude": 28,
+    "recordedDelta": 26,
+    "vitalityAfter": 86,
+    "backstopVerified": true
+  },
+  "harm": {
+    "transaction": "0xf516ab2ef57ba73ddf8a9c44b6265fb0165a5348daf2177f471c19cdaab535ee",
+    "status": "ACCEPTED",
+    "verdict": "harm",
+    "magnitude": 34,
+    "recordedDelta": -36,
+    "vitalityAfter": 50,
+    "backstopVerified": true
+  }
+}

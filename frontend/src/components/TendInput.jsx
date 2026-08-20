@@ -80,7 +80,7 @@ export default function TendInput({ wallet, busy, onTend }) {
                 <span className="text-rose">An offering needs at least {MIN_OFFERING} characters.</span>
               )}
               {wrongChain && (
-                <span className="text-rose">Switch to Bradbury testnet to tend.</span>
+                <span className="text-rose">Switch to GenLayer Studio to tend.</span>
               )}
               {!connected && (
                 <span className="text-glowtext-faint">Connect a wallet to tend the flame.</span>

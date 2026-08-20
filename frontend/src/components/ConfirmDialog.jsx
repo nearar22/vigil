@@ -47,7 +47,7 @@ export default function ConfirmDialog({
             <h2 className="font-display text-2xl font-semibold text-glowtext">{title}</h2>
             <p className="mt-2 text-sm leading-relaxed text-glowtext-dim">
               {body ||
-                'This submits a transaction on Bradbury Testnet. Network fees apply. Continue?'}
+                'This submits a gasless transaction on GenLayer Studio. Continue?'}
             </p>
             <div className="mt-6 flex gap-3">
               <button

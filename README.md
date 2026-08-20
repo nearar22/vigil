@@ -1,8 +1,27 @@
 # Vigil
 
-> Contract `0x73be85B98c3b7a0a4a25696E85A6ca410E95632E` on GenLayer Bradbury
-> (chain 4221), [open on the explorer](https://explorer-bradbury.genlayer.com/address/0x73be85B98c3b7a0a4a25696E85A6ca410E95632E).
-> Kindled by tx [`0x267df19b`](https://explorer-bradbury.genlayer.com/tx/0x267df19bebaa845781691da0511edaf7d313d0ce8300a5fc8d88eed7db7143f6).
+### One shared flame. Every offering changes its life.
+
+[![GenLayer](https://img.shields.io/badge/GenLayer-Intelligent_Contract-6d28d9)](https://genlayer.com)
+[![Contract tests](https://img.shields.io/badge/contract_tests-5_passing-15803d)](#verification)
+[![Frontend tests](https://img.shields.io/badge/frontend_tests-2_passing-15803d)](#verification)
+[![State](https://img.shields.io/badge/state-single_shared_flame-f97316)](#what-the-flame-is)
+
+> Vigil is not a feed of isolated AI scores. Every accepted judgment mutates the
+> same on-chain life: nourish it, neglect it, extinguish it, or carry it into a
+> new era.
+
+**Live on GenLayer Studio.**
+
+- App: [vigil-6mj.pages.dev](https://vigil-6mj.pages.dev)
+- Contract: [`0xc2c3...25ab`](https://explorer-studio.genlayer.com/address/0xc2c3bAe9Bb9a4ebA5bA615aa99165777ac7425ab)
+- Deployment: [`0xd1db...aff3`](https://explorer-studio.genlayer.com/tx/0xd1db1c0cdfb7b23ca41229b536ed722f690e05d7253099d018cec39b1b35aff3)
+
+| Layer | Authority |
+|---|---|
+| AI Warden | Proposes verdict, magnitude, and reply |
+| GenLayer validators | Audit the exact judgment against flame context and history |
+| Deterministic engine | Applies decay, clamps vitality, controls streaks, death, and rekindling |
 
 There is one flame. It does not belong to you. It belongs to everyone who has
 ever tended it and everyone who will. What follows keeps the form of a
@@ -80,25 +99,30 @@ that is already strong.
 
 ## How the Warden and the validators agree
 
-A leader proposes the verdict and magnitude; every validator re-reads the same
-offering in the same flame condition. They must agree on the verdict exactly and
-on the magnitude within a bounded tolerance, after which the deterministic
-backstop above turns the agreed judgment into the one shared state change.
+A leader proposes the exact verdict, magnitude, and reply. Validators audit that
+same judgment through GenLayer's non-comparative equivalence principle against
+the current vitality, recent tending, and submitted offering. Nearby defensible
+magnitudes are allowed; materially exaggerated, contradictory, generic, or
+prompt-injected rulings are rejected. Only then may the deterministic engine
+move the flame.
 
 ```python
-def validator_fn(leaders_res):
-    if not isinstance(leaders_res, gl.vm.Return):
-        return _handle_leader_error(leaders_res, leader_fn)
-    mine = leader_fn()
-    theirs = leaders_res.calldata
-    if not isinstance(theirs, dict):
-        return False
-    if mine["verdict"] != theirs.get("verdict"):          # nourish / pass / harm must match
-        return False
-    return abs(mine["magnitude"] - _coerce_magnitude(theirs.get("magnitude"))) <= 12
-
-return gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+agreed = gl.eq_principle.prompt_non_comparative(
+    create_judgment,
+    task=current_flame_history_and_offering,
+    criteria=exact_verdict_magnitude_context_and_integrity,
+)
+judgment = normalize(agreed)
+after = deterministic_transition(before, judgment)
 ```
+
+## Anti-gaming guards
+
+- A `nourish` magnitude that does not beat decay cannot advance the streak.
+- One address cannot advance two consecutive nourishment steps.
+- The same address cannot repeat an identical offering consecutively.
+- An offering must contain at least 12 normalized characters.
+- Every write records which semantic fields validators audited.
 
 ## Death and rekindling
 
@@ -121,8 +145,8 @@ a record that this community kept it not merely alive but thriving.
 
 ## What this costs, and why it is on GenLayer
 
-Nothing is wagered. There are no deposits and no value transfer; you pay only
-the network fee to make an offering. The flame is essential to GenLayer because
+Nothing is wagered. There are no deposits and no value transfer; Studio writes
+are gasless. The flame is essential to GenLayer because
 its life depends on a subjective judgment (is this offering genuine care?) that
 many independent validators must reproduce and agree on before the one shared
 state moves. A single server with an AI could rate offerings, but then one
@@ -139,9 +163,30 @@ brightens, dims, and reddens with its on-chain vitality.
 - The era number jumped and the vitality reset to its base: the flame either died
   and was rekindled, or ascended on a sustained streak. Check `get_eras` for an
   epitaph; an epitaph means a death, its absence means an ascension.
-- A write seemed to fail in your wallet but the flame still changed: an AI write
-  takes minutes and the client can raise on the receipt while the transaction is
-  live. Trust `get_flame`, not the wallet's return.
+- An AI write takes minutes: the interface follows the transaction through
+  consensus and never reports `UNDETERMINED` as success.
 
-The authoritative rules, exactly as enforced, are the contract itself; the
-explorer link sits at the top of this manual.
+## Live verification
+
+The hardened contract was tended twice on Studio:
+
+| Offering | Verdict | Magnitude | Contract delta | Vitality | Proof |
+|---|---|---:|---:|---:|---|
+| Careful cedar and shelter | nourish | 28 | +26 | 60 → 86 | [`0x24a3...fd34`](https://explorer-studio.genlayer.com/tx/0x24a398b5d113ca484293023b0e5da9387fe1e4c4432f934d6c248137cdd3fd34) |
+| Deliberate water damage | harm | 34 | -36 | 86 → 50 | [`0xf516...35ee`](https://explorer-studio.genlayer.com/tx/0xf516ab2ef57ba73ddf8a9c44b6265fb0165a5348daf2177f471c19cdaab535ee) |
+
+Both transactions were `ACCEPTED`; both recorded deltas exactly matched the
+contract formula rather than an arbitrary model-provided state change.
+
+## Verification
+
+```bash
+gltest tests -q       # 5 contract tests
+cd frontend
+npm test              # 2 transaction-status tests
+npm run build         # production bundle
+```
+
+The suite covers weak nourishment, streak farming, duplicate offerings,
+extinction and rekindling, exact semantic audit markers, wallet-provider wiring,
+and fail-closed consensus statuses.

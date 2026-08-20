@@ -33,6 +33,13 @@ const TERMINAL = new Set(['ACCEPTED', 'FINALIZED', 'UNDETERMINED', 'CANCELED']);
 
 export const isTerminal = (name) => TERMINAL.has(name);
 
+export function assertAccepted(decision) {
+  const status = statusName(decision?.status);
+  if (status === 'ACCEPTED' || status === 'FINALIZED') return decision;
+  if (status === 'TIMEOUT') throw new Error('Transaction confirmation timed out.');
+  throw new Error(`Transaction ended with ${status}. No change was confirmed.`);
+}
+
 export async function pollUntilDecided(client, hash, onUpdate, opts = {}) {
   const { tries = 200, intervalMs = 8000 } = opts;
   for (let i = 0; i < tries; i++) {

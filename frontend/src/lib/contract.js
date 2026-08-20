@@ -1,14 +1,14 @@
 import { createClient } from 'genlayer-js';
-import { testnetBradbury } from 'genlayer-js/chains';
+import { studionet } from 'genlayer-js/chains';
 
-export const CONTRACT_ADDRESS = '0x73be85B98c3b7a0a4a25696E85A6ca410E95632E';
-export const DEPLOY_TX = '0x267df19bebaa845781691da0511edaf7d313d0ce8300a5fc8d88eed7db7143f6';
-export const EXPLORER = 'https://explorer-bradbury.genlayer.com';
-export const FAUCET = 'https://testnet-faucet.genlayer.foundation/';
-export const RPC_URL = 'https://rpc-bradbury.genlayer.com';
-export const NETWORK_NAME = 'Bradbury';
-export const CHAIN_ID = 4221;
-export const CHAIN_ID_HEX = '0x107D';
+export const CONTRACT_ADDRESS = '0xc2c3bAe9Bb9a4ebA5bA615aa99165777ac7425ab';
+export const DEPLOY_TX = '0xd1db1c0cdfb7b23ca41229b536ed722f690e05d7253099d018cec39b1b35aff3';
+export const EXPLORER = 'https://explorer-studio.genlayer.com';
+export const FAUCET = 'https://studio.genlayer.com/';
+export const RPC_URL = 'https://studio.genlayer.com/api';
+export const NETWORK_NAME = 'GenLayer Studio';
+export const CHAIN_ID = 61999;
+export const CHAIN_ID_HEX = '0x' + CHAIN_ID.toString(16);
 
 export const addressUrl = (addr) => `${EXPLORER}/address/${addr}`;
 export const txUrl = (hash) => `${EXPLORER}/tx/${hash}`;
@@ -36,8 +36,12 @@ export function flameStage(vitality) {
   return { key: 'radiant', label: 'Radiant', color: '#37f0c8' };
 }
 
-export const readClient = createClient({ chain: testnetBradbury });
-export const makeWalletClient = (account) => createClient({ chain: testnetBradbury, account });
+export const readClient = createClient({ chain: studionet });
+export const makeWalletClient = (account, provider) => {
+  const walletProvider = provider || (typeof window !== 'undefined' ? window.ethereum : null);
+  if (!walletProvider) throw new Error('Browser wallet provider is unavailable.');
+  return createClient({ chain: studionet, account, provider: walletProvider });
+};
 
 // Reads can hit transient RPC errors; retry with exponential backoff.
 export async function withRpcRetry(fn, tries = 5) {
@@ -65,6 +69,9 @@ function asNumber(v) {
 function asString(v) {
   return v === undefined || v === null ? '' : String(v);
 }
+function asBool(v) {
+  return v === true || v === 1 || v === 1n || v === 'true' || v === '1';
+}
 function pick(obj, key) {
   if (obj instanceof Map) return obj.get(key);
   if (obj && typeof obj === 'object') return obj[key];
@@ -84,6 +91,7 @@ export function normFlame(raw) {
     vitality: asNumber(pick(raw, 'vitality')),
     status: asString(pick(raw, 'status')) || 'alight',
     nourishStreak: asNumber(pick(raw, 'nourishStreak')),
+    lastNourisher: asString(pick(raw, 'lastNourisher')),
     tendings: asNumber(pick(raw, 'tendings')),
     bornAtOffering: asNumber(pick(raw, 'bornAtOffering')),
   };
@@ -101,6 +109,8 @@ export function normOffering(raw) {
     vitalityBefore: asNumber(pick(raw, 'vitalityBefore')),
     vitalityAfter: asNumber(pick(raw, 'vitalityAfter')),
     delta: asNumber(pick(raw, 'delta')),
+    effectiveNourish: asBool(pick(raw, 'effectiveNourish')),
+    streakAdvanced: asBool(pick(raw, 'streakAdvanced')),
     event: asString(pick(raw, 'event')) || 'tended',
     by: asString(pick(raw, 'by')),
     seq: asNumber(pick(raw, 'seq')),

@@ -106,7 +106,7 @@ export default function AboutPanel({ open, onClose }) {
                   className="inline-flex items-center gap-1.5 font-mono text-xs text-glowtext-dim transition hover:text-cyan"
                 >
                   <Droplets size={12} />
-                  Claim test GEN from the faucet
+                  Open GenLayer Studio
                 </a>
               </div>
             </div>
