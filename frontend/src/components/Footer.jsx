@@ -7,8 +7,8 @@ export default function Footer() {
     <footer className="border-t border-abyss-line/60 bg-abyss/40">
       <div className="mx-auto flex max-w-[1500px] flex-col gap-3 px-5 py-6 text-xs text-glowtext-faint sm:flex-row sm:items-center sm:justify-between">
         <p className="text-balance">
-          Vigil is a single shared flame on GenLayer {NETWORK_NAME}. Everyone tends the same life. An
-          AI warden judges each offering; a deterministic backstop owns the vitality.
+          Vigil is a single shared flame on GenLayer {NETWORK_NAME}. A sealed keeper roster alternates
+          turns. An AI warden checks novelty and impact; deterministic code owns the vitality.
         </p>
         <div className="flex flex-wrap items-center gap-4">
           <a

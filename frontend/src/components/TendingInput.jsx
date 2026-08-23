@@ -3,12 +3,12 @@ import { Flame, Loader2, Wallet } from 'lucide-react';
 
 const MAX_OFFERING = 400;
 const MAX_ALIAS = 40;
-const MIN_OFFERING = 3;
+const MIN_OFFERING = 12;
 
 // The tending offering input: an alias and a written act of tending. Validates
 // the offering length, counts characters, and prevents double submits while a
 // tend is in flight.
-export default function TendingInput({ connected, busy, onConnect, onSubmit }) {
+export default function TendingInput({ connected, onRightChain, authorized, rotationBlocked, busy, onConnect, onSubmit }) {
   const [alias, setAlias] = useState('');
   const [offering, setOffering] = useState('');
   const [touched, setTouched] = useState(false);
@@ -19,7 +19,7 @@ export default function TendingInput({ connected, busy, onConnect, onSubmit }) {
 
   const submit = () => {
     setTouched(true);
-    if (tooShort || busy) return;
+    if (tooShort || busy || !authorized || rotationBlocked || !onRightChain) return;
     onSubmit({ alias: alias.trim().slice(0, MAX_ALIAS) || 'Anonymous', offering: trimmed.slice(0, MAX_OFFERING) });
   };
 
@@ -33,7 +33,7 @@ export default function TendingInput({ connected, busy, onConnect, onSubmit }) {
         <h2 className="font-display text-xl font-semibold text-glowtext">Offer an act of tending</h2>
       </div>
       <p className="mb-4 text-sm text-glowtext-dim">
-        Write something for the flame in its current state. The warden judges it in context, then a
+        A sealed roster alternates turns. The warden checks meaning against recent acts, then a
         deterministic backstop moves the one shared vitality.
       </p>
 
@@ -75,13 +75,22 @@ export default function TendingInput({ connected, busy, onConnect, onSubmit }) {
       {showError && (
         <p className="mt-1.5 text-xs text-rose">An offering must be at least {MIN_OFFERING} characters.</p>
       )}
+      {connected && !onRightChain && (
+        <p className="mt-1.5 text-xs text-rose">Switch to GenLayer Studio to tend.</p>
+      )}
+      {connected && onRightChain && !authorized && (
+        <p className="mt-1.5 text-xs text-rose">Read only: this wallet is not in the sealed keeper roster.</p>
+      )}
+      {connected && authorized && rotationBlocked && (
+        <p className="mt-1.5 text-xs text-glowtext-faint">Another keeper must tend before your next turn.</p>
+      )}
 
       <div className="mt-4">
         {connected ? (
           <button
             type="button"
             onClick={submit}
-            disabled={busy || tooShort}
+            disabled={busy || tooShort || !authorized || rotationBlocked || !onRightChain}
             className="flex w-full items-center justify-center gap-2 rounded-full bg-cyan px-5 py-3 text-sm font-semibold text-abyss-deep transition hover:bg-cyan-soft disabled:cursor-not-allowed disabled:opacity-50"
           >
             {busy ? (

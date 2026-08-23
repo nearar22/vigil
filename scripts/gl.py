@@ -32,6 +32,22 @@ def load_pk() -> str:
     return pk
 
 
+def load_secondary_pk() -> str:
+    pk = os.environ.get("GENLAYER_SECONDARY_PRIVATE_KEY", "").strip()
+    if not pk:
+        root = os.path.join(os.path.dirname(__file__), "..", "..")
+        env_path = os.path.join(root, ".env")
+        with open(env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("GENLAYER_SECONDARY_PRIVATE_KEY"):
+                    pk = line.split("=", 1)[1].strip().strip('"').strip("'")
+                    break
+    if not pk:
+        raise SystemExit("GENLAYER_SECONDARY_PRIVATE_KEY not found")
+    return pk if pk.startswith("0x") else "0x" + pk
+
+
 def make_client():
     account = create_account(account_private_key=load_pk())
     client = create_client(chain=studionet, account=account)

@@ -1,7 +1,7 @@
 {
   "network": "studionet",
   "chainId": 61999,
-  "tx": "0xd1db1c0cdfb7b23ca41229b536ed722f690e05d7253099d018cec39b1b35aff3",
-  "address": "0xc2c3bAe9Bb9a4ebA5bA615aa99165777ac7425ab",
+  "tx": "0x5279b6eca95d3c39cad9777916621bd257494f10ed4221bf530644b639611119",
+  "address": "0xC6321AF4A0B3d4a479c09cbD72D8aB6E9DBDDF84",
   "explorer": "https://explorer-studio.genlayer.com"
 }

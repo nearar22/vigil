@@ -1,8 +1,8 @@
 import { createClient } from 'genlayer-js';
 import { studionet } from 'genlayer-js/chains';
 
-export const CONTRACT_ADDRESS = '0xc2c3bAe9Bb9a4ebA5bA615aa99165777ac7425ab';
-export const DEPLOY_TX = '0xd1db1c0cdfb7b23ca41229b536ed722f690e05d7253099d018cec39b1b35aff3';
+export const CONTRACT_ADDRESS = '0xC6321AF4A0B3d4a479c09cbD72D8aB6E9DBDDF84';
+export const DEPLOY_TX = '0x5279b6eca95d3c39cad9777916621bd257494f10ed4221bf530644b639611119';
 export const EXPLORER = 'https://explorer-studio.genlayer.com';
 export const FAUCET = 'https://studio.genlayer.com/';
 export const RPC_URL = 'https://studio.genlayer.com/api';
@@ -92,6 +92,7 @@ export function normFlame(raw) {
     status: asString(pick(raw, 'status')) || 'alight',
     nourishStreak: asNumber(pick(raw, 'nourishStreak')),
     lastNourisher: asString(pick(raw, 'lastNourisher')),
+    lastKeeper: asString(pick(raw, 'lastKeeper')),
     tendings: asNumber(pick(raw, 'tendings')),
     bornAtOffering: asNumber(pick(raw, 'bornAtOffering')),
   };
@@ -106,6 +107,8 @@ export function normOffering(raw) {
     verdict: asString(pick(raw, 'verdict')) || 'pass',
     magnitude: asNumber(pick(raw, 'magnitude')),
     reply: asString(pick(raw, 'reply')),
+    novel: asBool(pick(raw, 'novel')),
+    similarTo: asString(pick(raw, 'similarTo')),
     vitalityBefore: asNumber(pick(raw, 'vitalityBefore')),
     vitalityAfter: asNumber(pick(raw, 'vitalityAfter')),
     delta: asNumber(pick(raw, 'delta')),
@@ -134,6 +137,15 @@ export function normStats(raw) {
     tendings: asNumber(pick(raw, 'tendings')),
     offerings: asNumber(pick(raw, 'offerings')),
     deaths: asNumber(pick(raw, 'deaths')),
+    keepers: asNumber(pick(raw, 'keepers')),
+  };
+}
+
+export function normRoster(raw) {
+  return {
+    keepers: asArray(pick(raw, 'keepers')).map(asString),
+    sealed: asBool(pick(raw, 'sealed')),
+    lastKeeper: asString(pick(raw, 'lastKeeper')),
   };
 }
 
@@ -149,6 +161,10 @@ export async function fetchFlame() {
 
 export async function fetchStats() {
   return normStats(await readView('get_stats'));
+}
+
+export async function fetchRoster() {
+  return normRoster(await readView('get_roster'));
 }
 
 // Walk the paged view (PAGE = 20) until the chain returns a short page.

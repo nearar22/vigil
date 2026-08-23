@@ -1,23 +1,39 @@
 {
-  "network": "studionet",
-  "contract": "0xc2c3bAe9Bb9a4ebA5bA615aa99165777ac7425ab",
-  "startVitality": 60,
-  "nourishment": {
-    "transaction": "0x24a398b5d113ca484293023b0e5da9387fe1e4c4432f934d6c248137cdd3fd34",
-    "status": "ACCEPTED",
-    "verdict": "nourish",
-    "magnitude": 28,
-    "recordedDelta": 26,
-    "vitalityAfter": 86,
-    "backstopVerified": true
+  "contract": "0xC6321AF4A0B3d4a479c09cbD72D8aB6E9DBDDF84",
+  "deployment": "0x5279b6eca95d3c39cad9777916621bd257494f10ed4221bf530644b639611119",
+  "wallets": {
+    "keeperA": "0x1d103a2c34aDFAcD1f5fAC54B80caB2776265a7e",
+    "keeperB": "0x5f37cEc7B4aC9081Bc83F28f4a033a8a6F3BA853",
+    "outsider": "0x241F30429DD5267F96E6473a0D16C9Ce8ccb5c24"
   },
-  "harm": {
-    "transaction": "0xf516ab2ef57ba73ddf8a9c44b6265fb0165a5348daf2177f471c19cdaab535ee",
-    "status": "ACCEPTED",
-    "verdict": "harm",
-    "magnitude": 34,
-    "recordedDelta": -36,
-    "vitalityAfter": 50,
-    "backstopVerified": true
+  "transactions": {
+    "configureRoster": {
+      "hash": "0x8c7d13161978ee4f5b73d2464fee285118cb9c13f3e7dedc98978ba62bffb6ac",
+      "status": "ACCEPTED"
+    },
+    "outsider": {
+      "hash": "0xe1e79525fb18b85b564ba2e11e530e50f6e377728b5726928dcfa247846b895e",
+      "status": "ACCEPTED"
+    },
+    "keeperA": {
+      "hash": "0xbfb3924d701915ecdc4fcc7fa80c2157403b4182261236be263ce87c98ce372b",
+      "status": "ACCEPTED"
+    },
+    "repeatTurn": {
+      "hash": "0xfcc54f1560efd6685b28fff57a4587f4d2ba2f9a6bd101a8c02a3e58021d6161",
+      "status": "ACCEPTED"
+    },
+    "semanticReplay": {
+      "hash": "0xd68735db06e6da6ee10a20ec9037f7a70c97a2fac376afe9912c63b07baa23ae",
+      "status": "ACCEPTED"
+    }
+  },
+  "assertions": {
+    "sealedTwoKeeperRoster": true,
+    "outsiderCannotTend": true,
+    "sameWalletCannotTakeConsecutiveTurns": true,
+    "semanticParaphraseDetected": true,
+    "semanticReplayCannotIncreaseVitality": true,
+    "firstOfferingAudited": true
   }
 }

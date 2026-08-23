@@ -7,12 +7,12 @@ const steps = [
   {
     icon: Flame,
     title: 'One shared flame',
-    body: 'There is exactly one flame, with a vitality from 0 to 100 and an era. Everyone tends the same life.',
+    body: 'There is exactly one flame, with a vitality from 0 to 100 and an era. A sealed roster of known keepers tends the same life.',
   },
   {
     icon: Eye,
     title: 'The warden judges',
-    body: 'An AI warden rules each offering nourish, pass, or harm with a magnitude, judged in the context of the flame\'s current condition and recent tending.',
+    body: 'An AI warden checks semantic novelty, then rules each offering nourish, pass, or harm in the context of the current flame and recent tending.',
   },
   {
     icon: Scale,
@@ -59,7 +59,7 @@ export default function AboutPanel({ open, onClose }) {
             </div>
             <h2 className="font-display text-3xl font-semibold text-glowtext">About Vigil</h2>
             <p className="mt-2 text-sm leading-relaxed text-glowtext-dim">
-              Vigil is an on-chain single shared living flame that everyone tends together. It is a
+              Vigil is an on-chain single shared living flame tended by a sealed roster of known keepers. It is a
               GenLayer intelligent contract: an AI warden judges every act of tending, and a
               deterministic backstop owns the one shared vitality.
             </p>

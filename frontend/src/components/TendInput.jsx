@@ -3,7 +3,7 @@ import { Flame, Loader2, Wallet } from 'lucide-react';
 import { MAX_OFFERING, MAX_ALIAS } from '../lib/contract.js';
 import ConfirmDialog from './ConfirmDialog.jsx';
 
-const MIN_OFFERING = 3;
+const MIN_OFFERING = 12;
 
 // The single tending input that sits below the flame: an alias and an offering.
 // Validates the offering length, prevents double submits, and gates the write

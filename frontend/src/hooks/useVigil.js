@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { fetchFlame, fetchStats, fetchOfferings, fetchEras } from '../lib/contract.js';
+import { fetchFlame, fetchStats, fetchOfferings, fetchEras, fetchRoster } from '../lib/contract.js';
 
 // Loads the one shared flame plus its offering log, sealed eras, and stats,
 // then refreshes on a slow background interval. The poll can be paused while a
@@ -9,6 +9,7 @@ export function useVigil(pollMs = 90000) {
   const [offerings, setOfferings] = useState([]);
   const [eras, setEras] = useState([]);
   const [stats, setStats] = useState({ era: 0, vitality: 0, tendings: 0, offerings: 0, deaths: 0 });
+  const [roster, setRoster] = useState({ keepers: [], sealed: false, lastKeeper: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -18,17 +19,19 @@ export function useVigil(pollMs = 90000) {
   const load = useCallback(async (quiet = false) => {
     if (!quiet) setLoading(true);
     try {
-      const [fl, st, offs, ers] = await Promise.all([
+      const [fl, st, offs, ers, ros] = await Promise.all([
         fetchFlame(),
         fetchStats(),
         fetchOfferings(60),
         fetchEras(60),
+        fetchRoster(),
       ]);
       if (!mounted.current) return;
       setFlame(fl);
       setStats(st);
       setOfferings(offs);
       setEras(ers);
+      setRoster(ros);
       setError(null);
       setLastUpdated(Date.now());
     } catch (e) {
@@ -63,6 +66,7 @@ export function useVigil(pollMs = 90000) {
     offerings,
     eras,
     stats,
+    roster,
     loading,
     error,
     lastUpdated,

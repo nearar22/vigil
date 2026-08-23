@@ -21,7 +21,7 @@ import { verdictOf } from './lib/contract.js';
 export default function App() {
   const wallet = useWallet();
   const reducedMotion = useReducedMotion();
-  const { flame, offerings, eras, stats, loading, error, refresh, pausePolling, resumePolling } =
+  const { flame, offerings, eras, stats, roster, loading, error, refresh, pausePolling, resumePolling } =
     useVigil();
   const { toasts, push, dismiss } = useToasts();
 
@@ -136,6 +136,9 @@ export default function App() {
   const busy = tendState.phase === 'wallet' || tendState.phase === 'contemplating';
 
   const connected = !!wallet.address;
+  const normalizedWallet = String(wallet.address || '').toLowerCase();
+  const authorized = roster.keepers.some((keeper) => keeper.toLowerCase() === normalizedWallet);
+  const rotationBlocked = authorized && roster.lastKeeper.toLowerCase() === normalizedWallet;
   const altarFlame = useMemo(() => flame, [flame]);
 
   return (
@@ -175,6 +178,9 @@ export default function App() {
               <aside className="flex flex-col gap-6">
                 <TendingInput
                   connected={connected}
+                  onRightChain={wallet.onRightChain}
+                  authorized={authorized}
+                  rotationBlocked={rotationBlocked}
                   busy={busy}
                   onConnect={wallet.connect}
                   onSubmit={requestTend}
